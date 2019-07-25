@@ -31,3 +31,49 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+
+/* Page Layout */
+#container{
+  display:flex;
+  height:calc(100vh - 16px);
+}
+#controls{
+  flex: 0 1 1;
+  width:500px;
+  height:100%;
+  overflow-y:scroll;
+}
+#preview{
+  flex: 0 1 1;
+}
+
+
+
+.Color{
+  display: inline-block;
+  width:15px;
+  height:15px;
+  border-style:solid;
+  border-width:1px;
+  border-color:black;
+}
+
+body{
+  background-color: wheat;
+}
+
+canvas{
+  border:1px solid black;
+}
+
+
+.toggler-on{
+  background-color:green;
+}
+.toggler-off{
+  background-color:red;
+}
+

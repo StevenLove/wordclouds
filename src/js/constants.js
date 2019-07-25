@@ -1,0 +1,4 @@
+module.exports = {
+    BLANKET_WIDTH_PIXELS: 768,
+    BLANKET_HEIGHT_PIXELS: 1025
+}
