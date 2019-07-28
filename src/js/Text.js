@@ -28,6 +28,9 @@ function Text(){
         if(prop=="fontSize"){
             if(newValue < 6) newValue = 6;
         }
+        if(prop=="angle"){
+            console.log("text new angle",newValue);
+        }
         this["_"+prop] = newValue;
         this._fab = undefined; // if we changed a property, invalidate the old fab
         if(["text","fontFamily","fontSize","angle","strokeWidth"].includes(prop)){
@@ -38,7 +41,6 @@ function Text(){
 })
 
 Text.prototype.toFabric = function(){
-    console.log("text color",this.color());
     if(this._fab)return this._fab;
     this._fab = new fabric.Text(
         this.text(),
@@ -134,6 +136,8 @@ Text.prototype.fromImageData = function(data){
 
 Text.prototype.toSprite = function(){
     if(this._sprite)return this._sprite;
+    // this.angle(0);
+    console.log("to sprite of text",this._text,this);
     let scratch = fabric.getScratchCanvas(); // automatically clears the scratch canvas
     let b = this.getBounds(); // gets the bounds but it also draws the text on the canvas so we don't need to redo that step
     this.fixOffset();

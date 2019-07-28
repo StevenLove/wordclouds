@@ -1,15 +1,14 @@
 import React from 'react';
-import $ from "jquery";
-// import {Button,UncontrolledCollapse, ListGroup, ListGroupItem } from "reactstrap";
-// import 'bootstrap/dist/css/bootstrap.min.css';
 import {Accordion,AccordionTab} from "primereact/accordion";
-import {Listbox} from "primereact/listbox";
 
 import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
-// import './node_modules/bootstrap/dist/css/bootstrap.css';
+
+import Artist from "../js/artist.js";
+import Board from "../js/board.js";
+import settings from "../js/settings.js";
 
 
 import TextInput      from "./TextInput.jsx";
@@ -18,29 +17,10 @@ import TextRotation   from "./TextRotation.jsx";
 import {TextColorPicker,BackgroundColorPicker}       from "./ColorBox.jsx";
 import FontBox        from "./FontBox.jsx";
 import ImageUpload    from "./ImageUpload.jsx";
+import DrawControls   from "./DrawControls.jsx";
 
-import utils          from "../js/utils.js";
-import settings       from "../js/settings.js";
-// import underlay       from "./js/underlay.js";
 
-// let compressedoperations = require("./js/compressedoperations.js");
-// import compressedoperations from "./js/compressedoperations.js";
-// console.log({compressedoperations})
-// import fabricUtils from "./js/fabricutils";
-// import canvasUtils from "./js/canvasutils";
-// import visualTests from "./js/visualTests.js";
 import BoardPreview from './BoardPreview.jsx';
-// console.log(visualTests,"t");
-
-// console.log({visualTests});
-
-var url;
-if(process.env.NODE_ENV == "production"){
-  url =  "http://gpwclark.net:8289/sample";
-}
-else{ // default: development
-  url = "http://localhost:8289/sample";
-}
 
 //shape:{
 // type: none, preset, user
@@ -62,53 +42,24 @@ else{ // default: development
 class App extends React.Component {
   constructor(props) {
     super(props);
-    var protoPhrases = [];
 
     this.state = {
-      protoPhrases: settings.defaultProtoPhrases,
-      shape: settings.defaultShape,
-      invert: true,
+      shape:        settings.defaultShape,
+      invert:       true,
+      text:         "hello",
+      words:        [],
+      separator:    ",",
       palette:      settings.defaultPalette,
       bg:           {mode:"transparent",color:"#FFFFFF"},
       fonts:        ["Courier","Garamond"],
-      sizer:        settings.defaultSizer,
+      // board:        new Board(),
+      artist:       new Artist()
+      
       // underlay:     underlay.defaultUnderlay
     };
+
+    console.log("new artist",this.state.artist);
   }
-
-  handleCreatePhrase = (id, text) => {
-    var protos = this.state.protoPhrases;
-    // don't do anything if it already exists
-    if(utils.containsByKey(protos,"id",id)){
-      console.log("already contains id " + id + " text: " + text);
-      return
-    }
-    var len = protos.length;
-    var newProto = {id: id, index: len, text: text};
-    var newProtos = protos.concat([newProto]);
-        console.log(id,text);
-
-console.log(newProto);
-console.log(newProtos);
-
-    this.setState({protoPhrases: newProtos});
-  };
-
-  handleCreatePhrases = (idsAndTexts) => {
-    var protos = this.state.protoPhrases;
-    var indexBase = protos.length;
-
-    if(idsAndTexts && idsAndTexts.length > 0){
-
-      var protosToAdd = idsAndTexts.map((obj,indexOffset)=>{
-        return {id:obj.id, index:indexBase+indexOffset, text:obj.text};
-      });
-
-      var updatedProtos = protos.concat(protosToAdd);
-      this.setState({protoPhrases: updatedProtos});
-
-    }
-  };
 
   handleUpdateSeed = (seed) => {
     this.setState({seed:seed});
@@ -117,103 +68,56 @@ console.log(newProtos);
   handleUpdateText = (text) => {
     console.log("handle update text",text);
     this.setState({text: text});
+    this.state.artist.text(text);
+    // this.calculateWords(text,this.state.separator);
+
   };
 
   handleUpdateSeparation = (sep) => {
     this.setState({separator:sep});
+    this.state.artist.separator(sep);
+    // this.calculateWords(this.state.text,sep);
   };
 
   handleUpdateRotation = (v) => {
     this.setState({angles:v});
+    this.state.artist.board().angles(v);
   };
 
   handleUpdateFont = (v) => {
     this.setState({fonts:v});
-  };
-
-  handleRemovePhrase = (id) => {
-    var protos = this.state.protoPhrases;
-    // don't do anything it it doesn't exist
-    if(!utils.containsByKey(protos,"id",id)){
-      return;
-    }
-
-    var index = utils.safeIndexByKey(protos,"id",id);
-    protos.splice(index,1);
-    // reset all indices
-    protos.forEach((proto,index)=>{
-      proto.index = index;
-    });
-    this.setState({protoPhrases: protos});
-  };
-
-  handleClearPhrases = () => {
-    this.setState({protoPhrases:[]});
+    this.state.artist.board().fonts(v);
   };
 
   handleSetPalette = (newPalette) => {
     this.setState({palette: newPalette})
+    this.state.artist.board().palette(newPalette.colors);
   };
 
   handleSetBG = (mode, color) => {
     this.setState({bg: {mode:mode,color:color}});
-  };
-
-  handleSetSizer = (newSizer) => {
-    this.setState({sizer: newSizer});
-  };
-
-  handleToggleFont = (fontName) => {
-    var newFontNames = this.state.fontNames.slice(0);
-
-    if(this.state.fontNames.includes(fontName)){
-      // Don't try to turn off the last font
-      if(this.state.fontNames.length === 1){
-        return;
-      }
-      var index = newFontNames.indexOf(fontName);
-      newFontNames.splice(index,1);
-    }
-    else{
-      newFontNames.push(fontName);
-    }
-    this.setState({fontNames:newFontNames})
-
+    this.state.artist.board().bg({mode:mode,color:color});
   };
 
   handleSetShape = (newShape) => {
     console.log("newshape",newShape);
     this.setState({shape: newShape})
   };
-
-  handleSetSprite = (newSprite) => {
-    this.setState({sprite: newSprite});
-  };
-
-
-  readURL = (e) => {
-    console.log(e.nativeEvent);
-    if (this.files && this.files[0]) {
-      var reader = new FileReader();
-      $(reader).load(
-        function(e) {
-          $('#blah').attr('src', e.target.result); 
-        }
-      );
-      reader.readAsDataURL(this.files[0]);
+  calculateWords(text,sep){
+    text = text.trim();
+    switch(sep){
+    case "commas":
+        this.setState({words:text.split(/,+/)})
+    break;
+    case "spaces":
+        this.setState({words:text.split(/\s+/)})
+    break;
+    case "breaks":
+    default:
+        this.setState({words:text.split(/\n+/)})
     }
-  };
+}
 
-  handleImageUpload = (file) => {
-    this.setState({file:file})
-  };
-
-  handleToggleInvert = () => {
-    var inverted = this.state.invert;
-    var newVal = !inverted;
-    this.setState({invert:newVal});
-    console.log("inverted state is now " + newVal); 
-  };
 
   render() {  
     return (
@@ -273,16 +177,14 @@ console.log(newProtos);
         </div>
         <div id="preview">
           <BoardPreview
-            seed={this.state.seed}
-            text={this.state.text}
-            separator={this.state.separator}
-            palette={this.state.palette}
-            angles={this.state.angles}
-            fonts={this.state.fonts}
-            bg={this.state.bg}
-            shape={this.state.shape}
+            board={this.state.artist._board}
           ></BoardPreview>
-
+          <DrawControls
+            start={this.state.artist.start.bind(this.state.artist)}
+            stop={this.state.artist.stop.bind(this.state.artist)}
+            clear={this.state.artist.clear.bind(this.state.artist)}
+            reset={this.state.artist.reset.bind(this.state.artist)}
+          ></DrawControls>
         </div>
       </div>
     );

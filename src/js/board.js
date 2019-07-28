@@ -16,6 +16,7 @@ function AttributeManager(seed){
 }
 AttributeManager.prototype.reset = function(){this._rand = seedrandom(this._seed);return this;}
 AttributeManager.prototype.getRandom = function(){
+  console.log("attribute manager",this._options);
   if(this._options && this._options.length > 0){
     return utils.GetRandomElement(this._options,this._rand);
   }
@@ -40,7 +41,7 @@ function Board(){
   this.texts = [];
   this._width = constants.BLANKET_WIDTH_PIXELS;
   this._height = constants.BLANKET_HEIGHT_PIXELS;
-  this._bg = Color("rgba(0,0,0,0)");
+  this._bg = {mode:"transparent",color:"rgb(255,255,255)"}
   this._sprite = new Sprite().fromDimensions(this._width,this._height);
   // this._fabcan;
   // this.worker = new Worker("./worker.js");
@@ -51,22 +52,18 @@ Board.prototype.resetAttributeManagers = function(){
   this.colorAttributeManager = new AttributeManager(this.seed()).options(this.palette());
   this.rotationAttributeManager = new AttributeManager(this.seed()).options(this.angles());
 }
-Board.prototype.setColors = function(){
-  this.resetAttributeManagers();
-  // this.colorAttributeManager.reset().options(this.palette());
-  console.log("FOREACH");
+/* Reapply current color rules to all existing fabric text elements on the page */
+Board.prototype.setExistingColors = function(){
+  console.log("set existing colors",this);
   this.fabcan().forEachObject(obj=>{
     if(obj instanceof fabric.Text){
       let c = this.colorAttributeManager.getRandom();
-      console.log(obj);
+      console.log("color set to ",c);
       obj.set("stroke",c);
       obj.set("fill",c);
     }
   })
   this.fabcan().renderAll();
-}
-Board.prototype.addText = function(t){
-  this.texts.push(t);
 }
 Board.prototype.fabcan = function(newvalue){
   if(newvalue){
@@ -85,13 +82,14 @@ Board.prototype.fabcan = function(newvalue){
   }
 };
 
-["bg","width","height","sprite","seed","colorPolicy","palette","angles","fonts","shape"].forEach(prop=>{
+["bg","width","height","sprite","seed","palette","angles","fonts","shape"].forEach(prop=>{
   Board.prototype[prop] = function(newValue){
       if(newValue===undefined){return this["_"+prop]} // get the property
-      
+      console.log("board set prop",prop,newValue);
       this["_"+prop] = newValue; // set the property
-      if(prop=="seed"){this.resetAttributeManagers();} // automatically update the random number generator if we change the seed
-      if(prop=="palette"){this.setColors();}
+      if(prop=="angles" || prop=="fonts" || prop == "palette" || prop == "seed"){this.resetAttributeManagers();}
+      // if(prop=="seed"){this.resetAttributeManagers();} // automatically update the random number generator if we change the seed
+      if(prop=="palette"){this.setExistingColors();}
       if(prop=="bg"){this.updateBG();}
       if(prop=="shape"){this.updateShape();}
       return this;

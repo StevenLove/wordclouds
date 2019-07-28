@@ -12,17 +12,22 @@ let nameToDegreeArrays = {
 
 class TextRotation extends React.Component {
     state = {
-        value:"breaks"
+        name:"flat"
     };
 
     componentDidMount() {
-        this.props.handleUpdate(this.state.value);
+        this.handleChange(this.state.name);
     }
 
-    handleChange = (e) => {
-        let val = e.target.value;
-        this.props.handleUpdate(nameToDegreeArrays[val]);
-        this.setState({value: val});
+    handleChange = rotationName => {
+        let valueArray = nameToDegreeArrays[rotationName];
+        this.props.handleUpdate(valueArray);
+        this.setState({value:rotationName});
+    }
+
+    handleSelectEvent = (e) => {
+        let rotationName = e.target.value;
+        this.handleChange(rotationName);
     };
 
     render() {
@@ -32,7 +37,7 @@ class TextRotation extends React.Component {
         <div className="TextRotation">
             <label>
                 Text Rotation: &nbsp; 
-                <select value={this.state.value} onChange={this.handleChange}>
+                <select value={this.state.name} onChange={this.handleSelectEvent}>
                     <option value="flat">Flat</option>
                     <option value="cross">0 and 90 degrees</option>
                     <option value="first">First Quadrant</option>

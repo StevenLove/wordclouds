@@ -246,9 +246,10 @@ Serializer.prototype.call = function(){
   return firstFunction().finally(this.callFinished.bind(this,this.id));
 }
 Serializer.prototype.callFinished = function(callerID){
+  console.log("call finished",callerID);
   if(this.id == callerID){
     if(this.queue.length >0){
-      setTimeout(this.call.bind(this),this.pauseBetweenDuration);
+      this.call();
     }
     else{
       this.busy = false;
@@ -273,7 +274,6 @@ Serializer.prototype.clear = function(){
   this.obs = new Observer();
   this.busy = false;
   this.stopping = false;
-  this.pauseBetweenDuration = 100;
 }
 
 /* perform a function on each element of an array in sequence, for asynchronous functions that return promises */
