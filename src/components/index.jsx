@@ -102,6 +102,7 @@ class App extends React.Component {
   handleSetShape = (newShape) => {
     console.log("newshape",newShape);
     this.setState({shape: newShape})
+    this.state.artist.board().shape(newShape);
   };
   calculateWords(text,sep){
     text = text.trim();
@@ -150,14 +151,9 @@ class App extends React.Component {
             <AccordionTab header="Cloud Shape">
               <ImageUpload 
               shape = {this.state.shape}
+              // onChangeInverted = {this.handleSetSh}
               onChange = {this.handleSetShape}
-
-              
-              // handleImageUpload={this.handleImageUpload}
-              // invert={this.state.invert}
-              // handleToggleInvert={this.handleToggleInvert}
               />
-              <img src={"./images/"+this.state.shape}/>
             </AccordionTab>
           </Accordion>
 
@@ -184,6 +180,7 @@ class App extends React.Component {
             stop={this.state.artist.stop.bind(this.state.artist)}
             clear={this.state.artist.clear.bind(this.state.artist)}
             reset={this.state.artist.reset.bind(this.state.artist)}
+            showSprite = {this.state.artist.board().showSpriteOnCanvas.bind(this.state.artist.board(),"boardPreviewSprite")}
           ></DrawControls>
         </div>
       </div>

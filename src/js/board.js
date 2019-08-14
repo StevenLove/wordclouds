@@ -16,7 +16,6 @@ function AttributeManager(seed){
 }
 AttributeManager.prototype.reset = function(){this._rand = seedrandom(this._seed);return this;}
 AttributeManager.prototype.getRandom = function(){
-  console.log("attribute manager",this._options);
   if(this._options && this._options.length > 0){
     return utils.GetRandomElement(this._options,this._rand);
   }
@@ -24,7 +23,6 @@ AttributeManager.prototype.getRandom = function(){
 AttributeManager.prototype.options = function(){
   if(arguments.length > 0){
     this._options = arguments[0];
-    console.log("options",this._options);
     return this;
   }
   else{
@@ -85,7 +83,6 @@ Board.prototype.fabcan = function(newvalue){
 ["bg","width","height","sprite","seed","palette","angles","fonts","shape"].forEach(prop=>{
   Board.prototype[prop] = function(newValue){
       if(newValue===undefined){return this["_"+prop]} // get the property
-      console.log("board set prop",prop,newValue);
       this["_"+prop] = newValue; // set the property
       if(prop=="angles" || prop=="fonts" || prop == "palette" || prop == "seed"){this.resetAttributeManagers();}
       // if(prop=="seed"){this.resetAttributeManagers();} // automatically update the random number generator if we change the seed
@@ -96,7 +93,11 @@ Board.prototype.fabcan = function(newvalue){
    }
 })
 Board.prototype.updateShape = function(){
-
+  let sprite = new Sprite().fromBackgroundImage(this.shape().filename);
+  if(this.shape().inverted){
+    sprite.invert();
+  }
+  this.sprite().clear().addSprite(sprite,0,0);
 }
 Board.prototype.toSprite = function(){
   return this.sprite();
@@ -122,7 +123,7 @@ Board.prototype.clear = function(){
   this.resetAttributeManagers();
   fabricutils.clearColor(this.fabcan(),this.getBGColor());
   if(this.shape()){
-    this.sprite(new Sprite().fromBackgroundImage(this.shape()));
+    this.updateShape();
   }
   else{
     this.sprite(new Sprite().fromDimensions(this.width(),this.height()));
@@ -194,6 +195,10 @@ Board.prototype.matchSpriteToCanvas = function(){
   let s = new Sprite().fromFabric(this.fabcan());
   this.sprite(s);
   return this;
+}
+Board.prototype.showSpriteOnCanvas = function(canvasID){
+  let spriteFabcan = fabric.fromID(canvasID);
+  this.toSprite().draw(spriteFabcan);
 }
 
 

@@ -4,6 +4,7 @@ import utils from "../js/utils.js";
 import {Listbox} from "primereact/listbox";
 import {InputText} from 'primereact/inputtext';
 import {Dropdown} from 'primereact/dropdown';
+import {ToggleButton} from 'primereact/togglebutton';
 
 
 
@@ -107,10 +108,8 @@ class ImageUpload extends React.Component {
     super(props);
     
     this.state = {
-      selected:"smallheart.png",
-      city: null,
-      cities: null,
-      car: 'BMW'
+      filename:"",
+      inverted:true
     }
   }
   onDrop = (files) => {
@@ -159,7 +158,7 @@ class ImageUpload extends React.Component {
 }
 selectedCarTemplate(option) {
 
-  if(option) {
+  if(option && option.value) {
       const logoPath = 'images/' + option.value;// + '.png';
       return (
           <div className="my-multiselected-item-token">
@@ -169,32 +168,47 @@ selectedCarTemplate(option) {
       );
   }
   else {
-      return <span className="my-multiselected-empty-token">Choose</span>
+      return <span className="my-multiselected-empty-token">None</span>
   }
 }
-onChange(e){
-  this.setState({selected:e.value});
-  this.props.onChange(e.value);
-  console.log("image set to ",e);
+onChangeFilename(e){
+  this.setState({filename:e.value});
+  this.props.onChange({filename:e.value,inverted:this.state.inverted});
+}
+onChangeInverted(e){
+  this.setState({inverted: e.value});
+  this.props.onChange({filename:this.state.filename,inverted:e.value});
 }
 
   render() {
     const imgs = [
+      {label:"None",value:""},
       {label:"Heart",value:"smallheart.png"},
       {label:"Fish",value:"fish.png"}
     ]
+    let extraOptions = <span></span>
+    if(this.state.filename){
+      extraOptions = <div>
+        <img width="90px" height="120px" src={"./images/"+this.state.filename}/>
+        <br/>
+        <ToggleButton checked={this.state.inverted} onLabel="Place Words Inside" offLabel="Place Words Outside" onChange={this.onChangeInverted.bind(this)} />
+      </div>
+    }
     
     return (
       <div>
-        <h3> Choose Shape </h3>
+        {/* <h3> Choose Shape </h3> */}
         <Dropdown
-        value={this.state.selected}
+        value={this.state.filename}
         options={imgs}
-        onChange={this.onChange.bind(this)}
+        onChange={this.onChangeFilename.bind(this)}
         itemTemplate={this.carTemplate}
         placeholder="Select a Car"/>
+        <br/>
+        {extraOptions}
       </div>
     );
+    
   }
 }
 

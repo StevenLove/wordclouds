@@ -69,9 +69,16 @@ Sprite.prototype.fullyInhabited = function(){
 Sprite.prototype.fullyUninhabited = function(){
     return this.fill(0);
 }
+Sprite.prototype.clear = function(){
+    return this.fullyUninhabited();
+}
 Sprite.prototype.fill = function(v){
     this.compressedBuffer.fill(v);
     return this;
+}
+Sprite.prototype.invert = function(){
+    console.log("inverting sprite",this,this.compressedBuffer);
+    this.compressedBuffer = this.compressedBuffer.map(int=>~int); // bitwise invert each int in the compressed buffer
 }
 
 
@@ -187,77 +194,76 @@ Sprite.prototype.draw = function(fab){
     return this;
 };
 
-/* Deprecated */
-(function(){
-    // Sprite.prototype.toCanvas = function(){
-    //     if(!this.canvas()){
-    //         this.canvas(new Canvas(this.width,this.height));
-    //     }
-    //     var ctx = this._canvas.getContext('2d');
-    //     var imgData = ctx.createImageData(this.width,this.height);
-        
+Sprite.prototype.toCanvas = function(){
+    if(!this.canvas()){
+        let $newCanvas = $("<canvas>").attr("width",this.width).attr("height",this.height);
+        $("body").append($newCanvas);
+        this.canvas($newCanvas[0]);
+    }
+    var ctx = this._canvas.getContext('2d');
+    var imgData = ctx.createImageData(this.width,this.height);
+    
 
-    //     var rA = this.inhabitedColor.red();
-    //     var gA = this.inhabitedColor.green();
-    //     var bA = this.inhabitedColor.blue();
-    //     var aA = this.inhabitedColor.alpha()*255 | 0; // floor
-    
-    //     var rB = this.uninhabitedColor.red();
-    //     var gB = this.uninhabitedColor.green();
-    //     var bB = this.uninhabitedColor.blue();
-    //     var aB = this.uninhabitedColor.alpha()*255 | 0; // floor
-    
-    //     let numPixels = this.width*this.height;
-    //     let numStrips = numPixels / (PIXELS_PER_STRIP);
-        
-    //     var strips = this.compressedBuffer;
-    //     var pixelIndex, stripIndex, index, strip;
+    var rA = this.inhabitedColor.red();
+    var gA = this.inhabitedColor.green();
+    var bA = this.inhabitedColor.blue();
+    var aA = this.inhabitedColor.alpha()*255 | 0; // floor
 
-    //     let baseDestPixelIndex;
-        
-    //     for(stripIndex = 0;
-    //     stripIndex < numStrips;
-    //     ++stripIndex){
-    
-    //     strip = strips[stripIndex];
-    
-    //     for(pixelIndex = 0;
-    //         pixelIndex < PIXEL_STRIP_LENGTH;
-    //         pixelIndex += PIXEL_LENGTH_BLURRED){
-    
-    //         baseDestPixelIndex = stripIndex * PIXEL_STRIP_LENGTH + pixelIndex;
-    //         var on = strip >>> 31;
-    
-    //         var r,g,b,a;
-    //         if(on){
-    //         r = rA;
-    //         g = gA;
-    //         b = bA;
-    //         a = aA;
-    //         }
-    //         else{
-    //         r = rB;
-    //         g = gB;
-    //         b = bB;
-    //         a = aB;
-    //         }
+    var rB = this.uninhabitedColor.red();
+    var gB = this.uninhabitedColor.green();
+    var bB = this.uninhabitedColor.blue();
+    var aB = this.uninhabitedColor.alpha()*255 | 0; // floor
 
-    //         for(let i = 0; i < PIXEL_LENGTH_BLURRED; i+=4){
-    //             imgData.data[baseDestPixelIndex+i] = r;
-    //             imgData.data[baseDestPixelIndex+i+1] = g;
-    //             imgData.data[baseDestPixelIndex+i+2] = b;
-    //             imgData.data[baseDestPixelIndex+i+3] = a;
-    //         }
-    //         strip = strip << 1;
+    let numPixels = this.width*this.height;
+    let numStrips = numPixels / (PIXELS_PER_STRIP);
     
-    //     }
-    //     }
+    var strips = this.compressedBuffer;
+    var pixelIndex, stripIndex, index, strip;
+
+    let baseDestPixelIndex;
     
-    //     ctx.putImageData(imgData,0,0);
-    
-    //     return this.canvas();
-    // }
-})()
+    for(stripIndex = 0;
+    stripIndex < numStrips;
+    ++stripIndex){
+
+    strip = strips[stripIndex];
+
+    for(pixelIndex = 0;
+        pixelIndex < PIXEL_STRIP_LENGTH;
+        pixelIndex += PIXEL_LENGTH_BLURRED){
+
+        baseDestPixelIndex = stripIndex * PIXEL_STRIP_LENGTH + pixelIndex;
+        var on = strip >>> 31;
+
+        var r,g,b,a;
+        if(on){
+        r = rA;
+        g = gA;
+        b = bA;
+        a = aA;
+        }
+        else{
+        r = rB;
+        g = gB;
+        b = bB;
+        a = aB;
+        }
+
+        for(let i = 0; i < PIXEL_LENGTH_BLURRED; i+=4){
+            imgData.data[baseDestPixelIndex+i] = r;
+            imgData.data[baseDestPixelIndex+i+1] = g;
+            imgData.data[baseDestPixelIndex+i+2] = b;
+            imgData.data[baseDestPixelIndex+i+3] = a;
+        }
+        strip = strip << 1;
+
+    }
+    }
+
+    ctx.putImageData(imgData,0,0);
+
+    return this.canvas();
+}
 
 
 // other: sprite

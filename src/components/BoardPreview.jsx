@@ -77,6 +77,11 @@ class BoardPreview extends React.PureComponent {
         this.props.board.fabcan(f);
     }
 
+    showSprite(){
+        let spriteFabcan = fabric.fromID("boardPreviewSprite");
+        this.props.board.toSprite().draw(spriteFabcan);
+    }
+
     // toggleAutoRedraw = () => {
     //     this.setState({autoRedraw:!this.state.autoRedraw})
     //     if(this.state.autoRedraw){
@@ -89,9 +94,10 @@ class BoardPreview extends React.PureComponent {
 
     
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return false;
-    }
+    // shouldComponentUpdate(nextProps, nextState) {
+        
+    //     return false;
+    // }
 
     render() {
         

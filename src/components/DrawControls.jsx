@@ -31,6 +31,8 @@ class DrawControls extends React.Component {
             <Button label="Start" onClick={this.props.start} />
             <Button label="Stop" onClick={this.props.stop} />
             <Button label="Reset" onClick={this.props.reset} />
+            <Button label="ShowSprite" onClick={this.props.showSprite} />
+
         </div>
         );
     }
