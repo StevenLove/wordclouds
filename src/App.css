@@ -77,3 +77,16 @@ canvas{
   background-color:red;
 }
 
+.my-multiselected-item-token{
+  display:inline-block;
+  padding: 2px 4px;
+  margin: 0 .286em 0 0;
+  display: inline-block;
+  vertical-align: middle;
+  height: 1.857em;
+  border-radius: 3px;
+  border:1px solid black;
+  background:#DBDBDB;
+  /* background: #007ad9; */
+  /* color: #fff; */
+}

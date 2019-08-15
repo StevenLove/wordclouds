@@ -1,104 +1,60 @@
 import React from 'react';
+import {MultiSelect} from 'primereact/multiselect'
 const DEFAULT_FONTS = ["Garamond", "Courier", "Bookman", "Arial", "Impact"];
 
-// const DEFAULT_SELECTED_FONTS = ["Garamond","Impact"];
+class FontDropdown extends React.Component {
+    // getInitialState :: a -> UIState
+    state = {
+        all:DEFAULT_FONTS.map(name=>{return{label:name,value:name}}),
+        // all:this.props.options,
+        // selected:   DEFAULT_SELECTED_FONTS  .map(name=>{return{label:name,value:name}})
+        selected: this.props.selected
+    };
 
-// class FontDropdown extends React.Component {
-//     // getInitialState :: a -> UIState
-//     state = {
-//         all:        DEFAULT_FONTS           .map(name=>{return{label:name,value:name}}),
-//         // selected:   DEFAULT_SELECTED_FONTS  .map(name=>{return{label:name,value:name}})
-//         selected: this.props.initial.map(name=>{return{label:name,value:name}})
-//     };
+    // render :: a -> ReactElement
+    render() {
+        let self = this;
+  
+        return <MultiSelect
+            options = {this.state.all}
+            value = {this.state.selected}
+            onChange = {function(event){
+                let val = event.value;
+                console.log("SELECTIZE FONT CHANGED",val);
+                self.setState({
+                  selected: val
+                });
+                self.props.handleChange(val);
+            }}
+            /* How to render an option in the dropdown list */
+            itemTemplate = {function(option){
+                return (
+                    <div className="simple-option">
+                        <span style={{fontFamily:option.value}}>{option.label}</span>
+                    </div>
+                );
+            }}
+            /* How to render an item that has been selected
+                For some reason the argument is not a {label:blah,value:blah} but just "blah" */
+            selectedItemTemplate = {function(fontName){
+                if (fontName) {
+                    return (
+                        <div className="my-multiselected-item-token">
+                            <span style={{fontFamily:fontName}}>{fontName}</span>
+                        </div>
+                    );
+                }
+                else {
+                    return <span className="my-multiselected-empty-token">Select Fonts...</span>
+                }
+            }}
+        />
+    }
 
-//     // render :: a -> ReactElement
-//     render() {
-//         self = this;
-//         let isSelected = function(value){
-//           return self.state.selected.map(lv=>lv.value).indexOf(value) > -1
-//         }
-  
-//         return <MultiSelect
-//             placeholder = "Select Fonts"
-//             options = {this.state.all}
-//             values = {this.state.selected}
-            
-//             // restoreOnBackspace :: Item -> String
-//             restoreOnBackspace = {function(item){
-//                 return item.label;
-//             }}
-            
-//             // onValuesChange :: [Item] -> (a -> Void) -> Void
-//             onValuesChange = {function(selected){
-//                 console.log("SELECTIZE FONT CHANGED",selected);
-//                 self.setState({
-//                   selected: selected
-//                 });
-//                 self.props.onValuesChange(selected);
-//             }}
-            
-//             // filterOptions :: [Item] -> [Item] -> String -> [Item]
-//             filterOptions = {function(options, values, search){
-//                 // if (!!charMap[search])
-//                 //     return options.filter(function(option){
-//                 //         return option.label == charMap[search];
-//                 //     });
-//                 // else
-//                 return options.filter(op=>!isSelected(op.value)).filter(op=>op.label.indexOf(search == 0));
-//             }}
-  
-//             // uid :: (Eq e) => Item -> e
-//             uid = {function(item){
-//                 return item.label;
-//             }}
-  
-//             // renderOption :: Int -> Item -> ReactElement
-//             renderOption = {function(item){
-//                 return <div className = "simple-option">
-//                     {/* <img src = {item.value} style = {{marginRight: 4, verticalAlign: "middle", width: 24}}/> */}
-//                     <span style={{fontFamily:item.value}}>{item.label}</span>
-//                 </div>
-//             }}
-            
-//             // renderValue :: Int -> Item -> ReactElement
-//             renderValue = {function(item){
-//                 return <div className = "removable-emoji">
-//                     <span onClick = {function(){
-//                         let newState = self.state.selected.filter(itemToRemove=>itemToRemove.value != item.value )
-//                         self.setState({
-//                             // selectedEmojis: _.reject(self.state.selectedEmojis, function(emoji){
-//                             //     return emoji.value == item.value;
-//                             // }) 
-//                             selected: newState
-//                         });
-//                         console.log("new fonts",newState);
-//                         self.props.onValuesChange(newState);
-//                     }}>x</span>
-//                     <span style={{fontFamily:item.value}}>{item.label}</span>
-//                     {/* <img src = {item.value} style = {{marginRight: 4, verticalAlign: "middle", width: 24}}/> */}
-//                 </div>
-//             }}
-//         />
-//     }
-
-//     // componentWillMount :: a -> Void
-//     componentWillMount() {
-//         self = this;
-//         // $.getJSON("http://api.github.com/emojis").done(function(result){
-//         //     self.setState({
-//         //         emojis:Object.keys(result).map(key=>{
-//         //           return {label:key,value:result[key]}
-//         //         })
-//         //         // emojis: _.chain(result)
-//         //         //     .pairs()
-//         //         //     .map(function(arr){
-//         //         //         return {label: arr[0], value: arr[1]};
-//         //         //     })
-//         //         //     .value()
-//         //     });    
-//         // });
-//     }
-// }
+    // componentWillMount :: a -> Void
+    componentWillMount() {
+    }
+}
 
 
 let numRenders = 0;
@@ -108,9 +64,7 @@ class FontBox extends React.Component {
         value:"breaks"
     };
 
-    handleChange = (e) => {
-      console.log("handle fonts change",e);
-        let values = e.map(item=>item.value);
+    handleChange = values => {
         this.props.handleUpdate(values);
     };
 
@@ -119,11 +73,12 @@ class FontBox extends React.Component {
         return (
 
         <div className="FontBox">
-        Fonts
-            {/* <FontDropdown
-                initial = {this.props.initial}
-                onValuesChange = {this.handleChange}
-            /> */}
+        {/* Fonts */}
+            <FontDropdown
+                options = {DEFAULT_FONTS}
+                selected = {this.props.selected}
+                handleChange = {this.handleChange}
+            />
         </div>
         );
     }

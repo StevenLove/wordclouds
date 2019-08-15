@@ -59,6 +59,8 @@ class App extends React.Component {
     };
 
     console.log("new artist",this.state.artist);
+
+    this.state.artist.board().fonts(this.state.fonts);
   }
 
   handleUpdateSeed = (seed) => {
@@ -85,6 +87,7 @@ class App extends React.Component {
   };
 
   handleUpdateFont = (v) => {
+    console.log("updating fonts to be ",v);
     this.setState({fonts:v});
     this.state.artist.board().fonts(v);
   };
@@ -130,7 +133,7 @@ class App extends React.Component {
                 <TextSeparation handleUpdate={this.handleUpdateSeparation}></TextSeparation>
             </AccordionTab>
             <AccordionTab header="Font">
-              <FontBox handleUpdate={this.handleUpdateFont} initial={this.state.fonts}></FontBox>
+              <FontBox handleUpdate={this.handleUpdateFont} selected={this.state.fonts}></FontBox>
             </AccordionTab>
             <AccordionTab header="Rotation">
               <TextRotation handleUpdate={this.handleUpdateRotation}></TextRotation>
