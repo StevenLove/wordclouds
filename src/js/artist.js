@@ -34,11 +34,12 @@ Artist.prototype.words = function(){return this._words};
 Artist.prototype.clear = function(){ return this.board().clear();}
 Artist.prototype.start = function(){
     curWordSize = MAX_WORD_SIZE;
-    this.placeEachWord();
-    // this._serializer.on(()=>{
-    //     console.log("restarting because serializer finished");
-    //     curWordSize += 20;
-    //     this.placeEachWord();
+    this.placeEachWord().then(this.start.bind(this));
+    
+    // let wordlist = this.words().map((word,index)=>[word,30-Math.round(index/10)]);
+    // WordCloud(document.querySelector("#boardPreviewCanvas"),{
+    //     list:wordlist,
+    //     // gridSize:1
     // });
 }
 Artist.prototype.stop = function(){
@@ -51,27 +52,33 @@ Artist.prototype.reset = function(){
     this._wordIndex = 0;
 }
 Artist.prototype.placeEachWord = function(){
-    if(curWordSize >= MIN_WORD_SIZE){
-        this._words.forEach(word=>{
-            this._serializer.add(()=>{
-                let promise;
-                if(curWordSize >= MIN_WORD_SIZE){
-                    let t = new Text().text(word).fontSize(curWordSize);
-                    promise = this.board().tryToPlace(t); // try to place the word
-                    promise.catch(()=>{ // if we couldn't place the word anywhere
-                        shrinkFutureWords() // shrink subsequent words down a bit
-                    })
-                }
-                else{
-                    promise = Promise.reject(); // not even going to try
-                }
-                return promise;
+    return new Promise((res,rej)=>{
+        if(curWordSize >= MIN_WORD_SIZE){
+            this._words.forEach(word=>{
+                this._serializer.add(()=>{
+                    let promise;
+                    if(curWordSize >= MIN_WORD_SIZE){
+                        let t = new Text().text(word).fontSize(curWordSize);
+                        promise = this.board().tryToPlace(t); // try to place the word
+                        promise.catch(()=>{ // if we couldn't place the word anywhere
+                            shrinkFutureWords() // shrink subsequent words down a bit
+                        })
+                    }
+                    else{
+                        promise = Promise.reject(); // not even going to try
+                    }
+                    return promise;
+                })
             })
-        })
-    }
-    else{
-        this.stop();
-    }
+            this._serializer.on(res);
+        }
+        else{
+            this.stop();
+            rej();
+        }
+    })
+    
+
 }
 
 function shrinkFutureWords(){

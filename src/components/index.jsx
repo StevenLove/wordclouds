@@ -104,6 +104,8 @@ class App extends React.Component {
 
   handleSetShape = (newShape) => {
     console.log("newshape",newShape);
+    this.state.artist.reset();
+    setTimeout(this.state.artist.clear.bind(this.state.artist),100);
     this.setState({shape: newShape})
     this.state.artist.board().shape(newShape);
   };
