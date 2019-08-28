@@ -1,7 +1,12 @@
 import React from 'react';
-import utils from "../js/utils.js";
+import {Dropdown} from 'primereact/dropdown';
 
 let numRenders = 0;
+const options = [
+    {label:"Line Breaks",value:"breaks"},
+    {label:"Spaces",value:"spaces"},
+    {label:"Commas",value:"commas"}
+]
 
 class TextSeparation extends React.Component {
     state = {
@@ -24,16 +29,12 @@ class TextSeparation extends React.Component {
 
         <div className="TextSeparation">
             <label>
-                Separate text by &nbsp; 
-                <select value={this.state.value} onChange={this.handleChange}>
-                    <option value="breaks">Line Breaks</option>
-                    <option value="spaces">Spaces</option>
-                    <option value="commas">Commas</option>
-                </select>
+                Separate text by &nbsp;
+                <Dropdown
+                    value={this.state.value}
+                    options={options}
+                    onChange={this.handleChange.bind(this)}/>
             </label>
-            {/* <div>
-                Renders:{numRenders}
-            </div> */}
         </div>
         );
     }
