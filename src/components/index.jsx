@@ -108,6 +108,7 @@ class App extends React.Component {
     setTimeout(this.state.artist.clear.bind(this.state.artist),100);
     this.setState({shape: newShape})
     this.state.artist.board().shape(newShape);
+    
   };
   calculateWords(text,sep){
     text = text.trim();
