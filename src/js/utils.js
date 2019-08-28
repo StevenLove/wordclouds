@@ -287,8 +287,40 @@ function asyncSequentially(array,fn) {
 }
 
 
+function getPropertySafe(){
+  let args = Array.from(arguments);
+  let obj = args.shift();
+  let result = args.reduce((acc,curr)=>{
+      if(acc === undefined || curr === undefined){
+          return undefined;
+      }
+      else{
+          return acc[curr];
+      }
+  },obj)
+  return result;
+}
+
+function setPropertySafe(obj,propertyName,propertyValue){
+  let args = Array.from(arguments);
+  if(args.length <  3) return;
+  if(args.length == 3){
+      obj[propertyName] = propertyValue;
+  }
+  if(args.length > 3){
+      if(obj[propertyName] == undefined){
+          obj[propertyName] = {};
+      }
+      // now obj[propName] becomse the base object
+      // and the remaining args are all shifted up one.
+      return this.setSafe(obj[propertyName],...args.slice(2));
+  }
+}
+
 
 module.exports = {
+  getPropertySafe,
+  setPropertySafe,
   Timer,
   Observer,
   Serializer,

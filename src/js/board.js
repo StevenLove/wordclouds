@@ -119,9 +119,18 @@ Board.prototype.getBGColor = function(){
     return this.bg().color;
   }
 }
+Board.prototype.showSpiral = function(spiral){
+    spiral.reset();
+    while(spiral.hasNext()){
+      let loc = spiral.next();
+      fabricutils.drawDot(this.fabcan(),loc[0],loc[1]);
+    }
+}
 Board.prototype.clear = function(){
   this.resetAttributeManagers();
+  this.fabcan().remove(...this.fabcan().getObjects());
   fabricutils.clearColor(this.fabcan(),this.getBGColor());
+  // this.showSpiral(Spiral.random);
   if(this.shape()){
     this.updateShape();
   }
@@ -139,7 +148,9 @@ Board.prototype.tryToPlace = function(text){
 
   return new Promise((res,rej)=>{
     setTimeout(()=>{
-      var spiral = Spiral.archimedean(this.width()-1,this.height()-1);
+      let spiral = Spiral.rectangular;// Spiral.random(this.width()-1,this.height()-1);
+      spiral.reset();
+      // var spiral = Spiral.archimedean(this.width()-1,this.height()-1);
       while(spiral.hasNext()){
         var loc = spiral.next();
         // console.log(JSON.stringify(loc));

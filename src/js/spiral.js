@@ -1,3 +1,5 @@
+let utils = require("./utils.js");
+
 
 // var archimedean = function(x,y) {
 //   var e = x/y;
@@ -94,8 +96,48 @@ var rectangular = function(x,y){
   }
 }
 
+function LoadedSpiral(generatorFn){
+  this.t = 0;
+  this.maxT = 2;
+  this.maxMaxT = 6000;
+  this.xs = [];
+  this.ys = [];
+  this.maxX = 767;
+  this.maxY = 1024;
+  this.generateFrom(generatorFn);
+  return this;
+}
+LoadedSpiral.prototype.reset = function(){this.t = 0};
+LoadedSpiral.prototype.generateFrom = function(genFn){
+  let generator = genFn(this.maxX,this.maxY);
+  let tempTime = 0;
+  do{
+    let result = generator.next();
+    let x = result[0];
+    let y = result[1];
+    if((x>0&&x<this.maxX) && (y>0&&y<this.maxY) && tempTime < this.maxMaxT){
+      ++tempTime
+      this.xs[tempTime] = x;
+      this.ys[tempTime] = y;
+    }
+    else if(!(x>0&&x<this.maxX) && !(y>0&&y<this.maxY)){
+      this.maxT = tempTime;
+      console.log(this.xs,this.ys);
+      break;
+    }
+  }while(true);
+  return this;
+}
+LoadedSpiral.prototype.hasNext = function(){
+  return this.t < this.maxT;
+}
+LoadedSpiral.prototype.next = function(){
+  ++this.t;
+  return [this.xs[this.t],this.ys[this.t]];
+}
+
 module.exports = {
-  archimedean: archimedean,
-  rectangular: rectangular,
-  random: random
+  archimedean: new LoadedSpiral(archimedean),
+  rectangular: new LoadedSpiral(rectangular),
+  random: new LoadedSpiral(random)
 }

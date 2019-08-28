@@ -141,7 +141,15 @@ var assertSameDimensions = function(canvasA, canvasB){
 var clearWhite = function(canv){
   clearColor(canv,"#FFFFFF");
 }
-
+var drawDot = function(canv,x,y){
+  canv.add(new fabric.Rect({
+    left:x,
+    top:y,
+    fill:"black",
+    width:1,
+    height:1
+  }))
+};
 var clearColor = function(canv,color){
   canv.clear();
   canv.add(new fabric.Rect({
@@ -336,6 +344,7 @@ var zoomCanvas = function(canvas, factor) {
 
 
 module.exports = {
+  drawDot,
   phraseToFabric: phraseToFabric,
   adjustedBoundingBox: adjustedBoundingBox,
   save: save,
