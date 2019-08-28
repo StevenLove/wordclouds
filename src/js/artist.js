@@ -1,9 +1,10 @@
 /* The artist makes the decisions about drawing on the board
 it determines the initial size of text to be drawn and generates the next word to be drawn on the board */
 
-let utils = require("./utils.js");
-let Text = require("./Text.js");
-let Board = require("./board.js");
+import utils from "./utils.js";
+import Text from "./Text.js";
+import Board from "./board.js";
+// import WordCloud from "wordcloud";
 
 const MAX_WORD_SIZE = 144;
 const MIN_WORD_SIZE = 10;
@@ -102,4 +103,4 @@ function calculateWords(text,sep){
     }
 }
 
-module.exports = Artist;
+export default Artist;

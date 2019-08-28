@@ -1,13 +1,11 @@
-// var spriter = require("./spriter.js");
-var Spiral = require("./spiral.js");
-let Sprite = require("./Sprite.js");
-// let Text = require("./Text.js");
-let Color = require("color");
-let constants = require("./constants.js");
-var fabric = require("./fabric.js");
-var fabricutils = require("./fabricutils.js");
-let utils = require("./utils.js");
-let seedrandom = require("seedrandom");
+import Spiral from "./spiral.js";
+import Sprite from "./Sprite.js";
+import Color from "color";
+import constants from "./constants.js";
+import fabric from "./fabric.js";
+import fabricutils from "./fabricutils.js";
+import utils from "./utils.js";
+import seedrandom from "seedrandom";
 
 function AttributeManager(seed){
   this._options = [];
@@ -213,5 +211,5 @@ Board.prototype.showSpriteOnCanvas = function(canvasID){
 }
 
 
-module.exports = Board;
+export default Board;
 

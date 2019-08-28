@@ -1,7 +1,7 @@
-let fabric = require("./fabric.js");
-let Color = require("color");
-let Utils = require('./utils.js');
-let Sprite = require("./Sprite.js");
+import fabric from "./fabric.js";
+import Color from "color";
+import Utils from "./utils.js";
+import Sprite from "./Sprite.js";
 
 function Text(){
     this._text = "hello world"; 
@@ -148,4 +148,4 @@ Text.prototype.toSprite = function(){
     return this._sprite
 }
 
-module.exports = Text;
+export default Text;

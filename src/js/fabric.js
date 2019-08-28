@@ -1,5 +1,5 @@
-var fabric = require('fabric').fabric;
-let $ = require("jquery");
+import {fabric as fabric} from "fabric";
+import $ from "jquery";
 
 console.log("my fabric js",fabric);
 
@@ -57,7 +57,7 @@ function display(fab){
     $el.attr("width",fab.width).attr("height",fab.height);
     $("body").append($el);
 }
-module.exports = {
+export default {
     display,
     getScratchCanvas,
     getCanvas,

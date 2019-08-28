@@ -1,13 +1,8 @@
-
-
-let $ = require("jquery");
-let fabric = require("./fabric.js");
-let Color = require("color");
-let Utils = require('./utils.js');
-// let Canvas = require("Canvas-browserify"); 
-let canvasutils = require("./canvasutils.js");
-let compressedOps = require('./compressedoperations.js');
-
+import $ from "jquery";
+import fabric from "./fabric.js";
+import Color from "color";
+import Utils from "./utils.js";
+import compressedOps from "./compressedoperations.js";
 
 const PIXEL_BLUR = 1; // change to 3 and we will check a pixel and then assume the next 2 are the same and just store the 1 value to cut total size down by 2/3
 const PIXEL_LENGTH = 4;
@@ -291,4 +286,4 @@ Sprite.prototype.addSprite = function(other,xoff,yoff){
     );
 }
 
-module.exports = Sprite;
+export default Sprite;

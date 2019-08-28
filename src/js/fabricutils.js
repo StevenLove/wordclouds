@@ -1,7 +1,5 @@
-var fabric = require('./fabric.js');
-// var Canvas = require("canvas-browserify");
-var canvasutils = require("./canvasutils.js");
-let compressedConstants = require("./compressedoperations").constants;
+import fabric from "./fabric.js";
+import {constants as compressedConstants} from "./compressedoperations"
 
 var phraseToFabric = function(phrase){
   var safety_distance_from_canvas_edge = 2;
@@ -343,7 +341,7 @@ var zoomCanvas = function(canvas, factor) {
 
 
 
-module.exports = {
+export default {
   drawDot,
   phraseToFabric: phraseToFabric,
   adjustedBoundingBox: adjustedBoundingBox,

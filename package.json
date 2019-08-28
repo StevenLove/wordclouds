@@ -20,6 +20,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "gh-pages":" rm -r docs && react-scripts build && mv build docs && git add docs/ && git commit -m 'deploy' && git push origin master",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

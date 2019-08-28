@@ -1,4 +1,4 @@
-var seedrandom = require("seedrandom");
+import seedrandom from "seedrandom";
 
 var SetGlobalSeed = function(seed){
   seedrandom(seed, { global: true });
@@ -318,7 +318,7 @@ function setPropertySafe(obj,propertyName,propertyValue){
 }
 
 
-module.exports = {
+let toExport = {
   getPropertySafe,
   setPropertySafe,
   Timer,
@@ -348,3 +348,5 @@ module.exports = {
   SetGlobalSeed: SetGlobalSeed,
   assertHasProperties: assertHasProperties
 }
+
+export default toExport;

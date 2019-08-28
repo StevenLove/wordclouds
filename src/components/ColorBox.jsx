@@ -1,6 +1,6 @@
 import React from 'react';
 import settings from "../js/settings.js";
-var ColorLibrary = require('color');
+import ColorLibrary from "color";
 
 
 class BackgroundColorPicker extends React.Component {

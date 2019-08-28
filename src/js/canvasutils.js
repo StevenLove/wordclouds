@@ -1,10 +1,7 @@
-var fs = require('fs');
-let $ = require("jquery");
-
-var fabric = require('./fabric.js');
-// var 
-// var Canvas = require("canvas");
-// var Canvas = require("canvas-browserify");
+import fs from "fs";
+import $ from "jquery";
+import fabric from "./fabric.js";
+import fabricutils from "./fabricutils.js";
 // var Image = Canvas.Image;
 
 
@@ -23,7 +20,6 @@ var fabric = require('./fabric.js');
 // }
 
 var toFabric = function(canvas, callback){
-  var fabricutils = require("./fabricutils.js");
   var dataurl = canvas.toDataURL();
   var fabric_canvas = new fabric.StaticCanvas(canvas.width, canvas.height);
   fabricutils.load(dataurl,function(fabric_image){
@@ -109,11 +105,7 @@ function display(canvas){
 }
 
 
-
-module.exports = {
+export default {
   display,
-  // toPNG: toPNG,
-  toFabric: toFabric,
-  // imageDataFromPNG: imageDataFromPNG
-  // drawBufferToCanvas: drawBufferToCanvas
+  toFabric
 }

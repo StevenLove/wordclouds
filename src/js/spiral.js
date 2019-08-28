@@ -1,25 +1,3 @@
-let utils = require("./utils.js");
-
-
-// var archimedean = function(x,y) {
-//   var e = x/y;
-//   var k = 5;
-//   var limit = 50;
-//   var xOrigin = x/2;
-//   var yOrigin = y/2;
-
-//   var kt = 0;
-//   var klimit = limit * k;
-
-//   return {
-//     hasNext: function(){return kt < klimit},
-//     next: function(){
-//       kt += k;
-//         return [xOrigin + e * kt * Math.cos(kt), yOrigin + kt * Math.sin(kt)];
-//     }
-//   };
-// }
-
 var archimedean = function(x,y) {
   var e = x/y;
   var xOrigin = x/2;
@@ -96,6 +74,8 @@ var rectangular = function(x,y){
   }
 }
 
+/* This creates spiral objects with next and hasNext functions
+But it doesn't calculate x,y coordinates on the fly, instead it calculates them all out ahead of time. */
 function LoadedSpiral(generatorFn){
   this.t = 0;
   this.maxT = 2;
@@ -136,7 +116,7 @@ LoadedSpiral.prototype.next = function(){
   return [this.xs[this.t],this.ys[this.t]];
 }
 
-module.exports = {
+export default {
   archimedean: new LoadedSpiral(archimedean),
   rectangular: new LoadedSpiral(rectangular),
   random: new LoadedSpiral(random)
