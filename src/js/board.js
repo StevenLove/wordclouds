@@ -194,7 +194,7 @@ Board.prototype.draw = function(){
 
   if(!this._fabcan){
     this._fabcan = fabric.getCanvas(this.width(),this.height());
-    fabric.display(this._fabcan);
+    // fabric.display(this._fabcan);
   }
   else{
     let f = this._fabcan;

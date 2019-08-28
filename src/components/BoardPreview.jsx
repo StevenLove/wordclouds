@@ -105,7 +105,7 @@ class BoardPreview extends React.PureComponent {
         return (
         <div className="BoardPreview">
             <canvas width="300" height="400" id="boardPreviewCanvas"></canvas>
-            <canvas width="300" height="400" id="boardPreviewSprite"></canvas>
+            {/* <canvas width="300" height="400" id="boardPreviewSprite"></canvas> */}
         </div>
         );
         

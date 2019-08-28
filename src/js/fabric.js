@@ -41,7 +41,7 @@ function fromID(id){
 }
 function getCanvas(width,height){
     console.log("getting canvas with wh",width,height);
-    let $canvasElement = $("<canvas>");//.css("display","none");
+    let $canvasElement = $("<canvas>").css("display","none");
     $("body").append($canvasElement);
     let staticCanvas = new fabric.StaticCanvas($canvasElement[0],{width:width,height:height,enableRetinaScaling:false});
     let $el = $(staticCanvas.lowerCanvasEl);

@@ -110,7 +110,7 @@ Text.prototype.draw = function(fab){
     if(!fab){
         let newfab = fabric.getCanvas(w,h);
         newfab.add(fab_text,boundingRect);
-        fabric.display(newfab);
+        // fabric.display(newfab);
     }
     else{
         fab.add(fab_text,boundingRect);

@@ -180,7 +180,7 @@ Sprite.prototype.draw = function(fab){
         let newfab = fabric.getCanvas(this.width,this.height);
         this.toFabricAsync().then(fabObj=>{
             newfab.add(fabObj);
-            fabric.display(newfab);
+            // fabric.display(newfab);
             this.fabcan(newfab);
         })
     }
@@ -196,7 +196,7 @@ Sprite.prototype.draw = function(fab){
 
 Sprite.prototype.toCanvas = function(){
     if(!this.canvas()){
-        let $newCanvas = $("<canvas>").attr("width",this.width).attr("height",this.height);
+        let $newCanvas = $("<canvas>").attr("width",this.width).attr("height",this.height).css("display","none");
         $("body").append($newCanvas);
         this.canvas($newCanvas[0]);
     }
