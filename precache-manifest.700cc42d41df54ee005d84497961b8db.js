@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7761b367977a39835299f9296e947fdc",
+    "revision": "e27e338a5acf3ea394539db53d1f9524",
     "url": "/wordclouds/index.html"
   },
   {
-    "revision": "9e8834ad91173b9673fa",
+    "revision": "d4ced8290033069b6cf3",
     "url": "/wordclouds/static/css/2.d9cf61c3.chunk.css"
   },
   {
-    "revision": "06154e54df2fc6051104",
+    "revision": "96b7364c98b58afa0b22",
     "url": "/wordclouds/static/css/main.1a17fa20.chunk.css"
   },
   {
-    "revision": "9e8834ad91173b9673fa",
-    "url": "/wordclouds/static/js/2.96d7e037.chunk.js"
+    "revision": "d4ced8290033069b6cf3",
+    "url": "/wordclouds/static/js/2.a4d857ad.chunk.js"
   },
   {
-    "revision": "06154e54df2fc6051104",
-    "url": "/wordclouds/static/js/main.cefd6026.chunk.js"
+    "revision": "96b7364c98b58afa0b22",
+    "url": "/wordclouds/static/js/main.3fc59fd8.chunk.js"
   },
   {
     "revision": "85af2bcc225042fce497",
